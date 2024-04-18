@@ -2,40 +2,36 @@ import { Input, Button } from "@nextui-org/react";
 import { useState } from "react";
 import Fondo from "./fondologin.jpg";
 
-export default function Login() {
-  const [formData, setFormData] = useState({ email: "", password: "" });
+function Login() {
+  const [carnet, setcarnet] = useState("");
+  const [contraseña, setcontraseña] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const JsonDatos = {
+      carnet: carnet,
+      contraseña: contraseña,
+    };
+
+    fetch("http://localhost:5000/iniciarSesion", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(JsonDatos),
+    })
+      .then((response) => response.json())
+      .then((res) => {
+        if (res.status === 200) {
+          alert("Bienvenido");
+        } else if (res.status === 401) {
+          alert("Carnet o contraseña incorrecta");
+        } else {
+          console.log(res);  
+        }
+      })
+      .catch((error) => console.error(error));
   };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Aqui puedes hacer la peticion a tu API
-    try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        alert("Error en la peticion al servidor");
-        throw new Error("Error en la peticion al servidor");
-      }
-
-      const data = await response.json();
-      alert("Inicio de sesion con exito");
-      console.log({ data });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
     <main
       className="flex justify-center items-center h-screen"
@@ -46,32 +42,40 @@ export default function Login() {
       }}
     >
       <div className="bg-transparent p-8 rounded-md shadow-lg text-center">
-        <h1 className="font-bold text-lg text-white mb-8">Inicio de Sesión</h1>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-center">
-          <Input
-            type="email"
-            label="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            autoComplete="off"
-            className="w-full bg-transparent text-white border border-white"
-            style={{ color: 'white' }}
-          />
-          <Input
-            type="password"
-            label="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full bg-transparent text-white border border-white"
-            style={{ color: 'white' }}
-          />
-          <Button type="submit" color="primary" className="text-white">
-            Inicio de Sesión
-          </Button>
+        <h1 className="font-bold text-lg text-white mb-8">LOGIN</h1>
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-4 items-center"
+        >
+          <div>
+            <Input
+              type="text"
+              label="carnet"
+              onChange={(e) => setcarnet(e.target.value)}
+              value={carnet}
+              autoComplete="off"
+              className="w-full bg-transparent text-white border border-white"
+              style={{ color: "white" }}
+            />
+          </div>
+          <div>
+            <Input
+              type="password"
+              label="contraseña"
+              value={contraseña}
+              onChange={(e) => setcontraseña(e.target.value)}
+              className="w-full bg-transparent text-white border border-white"
+              style={{ color: "white" }}
+            />
+          </div>
+          <div>
+            <Button type="submit" color="primary" className="text-white">
+              Inicio de Sesión
+            </Button>
+          </div>
         </form>
       </div>
     </main>
   );
 }
+export default Login;
