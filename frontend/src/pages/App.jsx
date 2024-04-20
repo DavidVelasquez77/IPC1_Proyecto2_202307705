@@ -49,7 +49,7 @@ export default function App() {
             <Link to="/login" style={{ color: 'white' }}>Login</Link>
             </NavbarItem>
             <NavbarItem>
-            <Button color="secondary" style={{ backgroundColor: '#172554', color: '#6BC6D1' }}>
+            <Button color="secondary" variant="flat">
                 <Link to="/signup" style={{ color: '#6BC6D1', textDecoration: 'none' }}>Sign Up</Link>
               </Button>
             </NavbarItem>

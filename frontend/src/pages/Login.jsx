@@ -27,13 +27,19 @@ export default function Login() {
       .then((data) => {
         if (data.message === "inicio de sesion exitoso") {
           if (data.usuario.isAdmin) {
-            alert(`Bienvenido administrador ${data.usuario.nombres} ${data.usuario.apellidos}`);
-            setRedirectPath("/admin"); 
+            alert(
+              `Bienvenido administrador ${data.usuario.nombres} ${data.usuario.apellidos}`
+            );
+            setRedirectPath("/admin");
           } else {
-            alert(`Bienvenido usuario ${data.usuario.nombres} ${data.usuario.apellidos}`);
-            setRedirectPath("/home"); 
+            alert(
+              `Bienvenido usuario ${data.usuario.nombres} ${data.usuario.apellidos}`
+            );
+            setRedirectPath("/home");
           }
-        } else if (data.error === "el usuario no existe o la contraseña es incorrecta") {
+        } else if (
+          data.error === "el usuario no existe o la contraseña es incorrecta"
+        ) {
           alert("Carnet o contraseña incorrecta");
         } else {
           console.log(data);
@@ -82,11 +88,17 @@ export default function Login() {
             />
           </div>
           <div>
-            <Button type="submit" color="primary" className="text-white">
+            <Button
+              type="submit"
+              color="primary"
+              className="text-white"
+              variant="shadow"
+            >
               Inicio de Sesión
             </Button>
           </div>
         </form>
       </div>
     </main>
-  )}
+  );
+}
