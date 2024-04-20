@@ -1,8 +1,54 @@
+import React, { useState } from 'react';
 import Fondoregistro from "./fondoregistro.png";
 import { Input, Button } from "@nextui-org/react";
 import { Link } from "react-router-dom";
 
 export default function SignUp() {
+  const [carnet, setCarnet] = useState("");
+  const [nombres, setNombres] = useState("");
+  const [apellidos, setApellidos] = useState("");
+  const [genero, setGenero] = useState("");
+  const [facultad, setFacultad] = useState("");
+  const [carrera, setCarrera] = useState("");
+  const [correo_electronico, setCorreo_electronico] = useState("");
+  const [contraseña, setContraseña] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    // Verificar si la contraseña cumple con los requisitos
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!regex.test(contraseña)) {
+      alert("La contraseña debe tener al menos 8 caracteres, entre estos caracteres deberá contar con al menos 1 mayúscula, 1 minúscula y 1 carácter especial.");
+      return;
+    }
+
+    const JsonDatos = {
+      carnet: carnet,
+      nombres: nombres,
+      apellidos: apellidos,
+      genero: genero,
+      facultad: facultad,
+      carrera: carrera,
+      correo_electronico: correo_electronico,
+      contraseña: contraseña,
+    };
+
+    fetch("http://localhost:5000/registro", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(JsonDatos),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      alert("Registro correcto");
+    })
+    .catch(error => console.error('Error:', error));
+  };
+
   return (
     <div
       style={{
@@ -26,128 +72,139 @@ export default function SignUp() {
       >
         USocial - Registro
       </h1>
-      <div style={{ width: "max-content" }}>
-        <Input
-          isRequired
-          type="text"
-          label="Carnet/Código USAC"
-          variant="bordered"
-          className="max-w-md"
-        />
-        <hr
-          style={{
-            height: "8px",
-            border: "none",
-            backgroundColor: "transparent",
-          }}
-        />
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <form onSubmit={handleSubmit}>
+        <div style={{ width: "max-content" }}>
           <Input
             isRequired
             type="text"
-            label="Nombres"
+            label="Carnet/Código USAC"
             variant="bordered"
-            className="max-w-xs"
+            onChange={(event) => setCarnet(event.target.value)}
+            className="max-w-md"
           />
-          <div style={{ width: "10px" }}></div>
-          <Input
-            isRequired
-            type="text"
-            label="Apellidos"
-            variant="bordered"
-            className="max-w-xs"
+          <hr
+            style={{
+              height: "8px",
+              border: "none",
+              backgroundColor: "transparent",
+            }}
           />
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Input
+              isRequired
+              type="text"
+              label="Nombres"
+              onChange={(event) => setNombres(event.target.value)}
+              variant="bordered"
+              className="max-w-xs"
+            />
+            <div style={{ width: "10px" }}></div>
+            <Input
+              isRequired
+              type="text"
+              label="Apellidos"
+              onChange={(event) => setApellidos(event.target.value)}
+              variant="bordered"
+              className="max-w-xs"
+            />
+          </div>
+          <hr
+            style={{
+              height: "8px",
+              border: "none",
+              backgroundColor: "transparent",
+            }}
+          />
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Input
+              isRequired
+              type="text"
+              label="Género (M/F)"
+              onChange={(event) => setGenero(event.target.value)}
+              variant="bordered"
+              className="max-w-xs"
+            />
+            <div style={{ width: "10px" }}></div>
+            <Input
+              isRequired
+              type="text"
+              label="Correo Electrónico"
+              onChange={(event) => setCorreo_electronico(event.target.value)}
+              variant="bordered"
+              className="max-w-xs"
+            />
+          </div>
+          <hr
+            style={{
+              height: "8px",
+              border: "none",
+              backgroundColor: "transparent",
+            }}
+          />
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Input
+              isRequired
+              type="text"
+              label="Facultad"
+              onChange={(event) => setFacultad(event.target.value)}
+              variant="bordered"
+              className="max-w-xs"
+            />
+            <div style={{ width: "10px" }}></div>
+            <Input
+              isRequired
+              type="text"
+              label="Carrera"
+              onChange={(event) => setCarrera(event.target.value)}
+              variant="bordered"
+              className="max-w-xs"
+            />
+          </div>
+          <hr
+            style={{
+              height: "8px",
+              border: "none",
+              backgroundColor: "transparent",
+            }}
+          />
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Input
+              isRequired
+              type="password"
+              label="Contraseña"
+              onChange={(event) => setContraseña(event.target.value)}
+              variant="bordered"
+              className="max-w-xs"
+            />
+            <div style={{ width: "10px" }}></div>
+            <Input
+              isRequired
+              type="password"
+              label="Confirmar Contraseña"
+              variant="bordered"
+              className="max-w-xs"
+            />
+          </div>
         </div>
-        <hr
+        <div
           style={{
-            height: "8px",
-            border: "none",
-            backgroundColor: "transparent",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: "20px",
           }}
-        />
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <Input
-            isRequired
-            type="text"
-            label="Género (M/F)"
-            variant="bordered"
-            className="max-w-xs"
-          />
-          <div style={{ width: "10px" }}></div>
-          <Input
-            isRequired
-            type="text"
-            label="Correo Electrónico"
-            variant="bordered"
-            className="max-w-xs"
-          />
-        </div>
-        <hr
-          style={{
-            height: "8px",
-            border: "none",
-            backgroundColor: "transparent",
-          }}
-        />
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <Input
-            isRequired
-            type="text"
-            label="Facultad"
-            variant="bordered"
-            className="max-w-xs"
-          />
-          <div style={{ width: "10px" }}></div>
-          <Input
-            isRequired
-            type="text"
-            label="Carrera"
-            variant="bordered"
-            className="max-w-xs"
-          />
-        </div>
-        <hr
-          style={{
-            height: "8px",
-            border: "none",
-            backgroundColor: "transparent",
-          }}
-        />
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <Input
-            isRequired
-            type="password"
-            label="Contraseña"
-            variant="bordered"
-            className="max-w-xs"
-          />
-          <div style={{ width: "10px" }}></div>
-          <Input
-            isRequired
-            type="password"
-            label="Confirmar Contraseña"
-            variant="bordered"
-            className="max-w-xs"
-          />
-        </div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: "20px", // Agregué un margen superior aquí para separar los botones del formulario
-        }}
-      >
-        <Button color="primary" variant="faded" style={{ marginRight: "10px" }}>
-          Registrarse
-        </Button>
-        <Link to="/login" style={{ textDecoration: 'none' }}>
-          <Button color="primary" variant="shadow">
-            Iniciar Sesión
+        >
+          <Button type='submit' color="primary" variant="faded" style={{ marginRight: "10px" }}>
+            Registrarse
           </Button>
-        </Link>
-      </div>
+          <Link to="/login" style={{ textDecoration: 'none' }}>
+            <Button color="primary" variant="shadow">
+              Iniciar Sesión
+            </Button>
+          </Link>
+        </div>
+      </form>
+      
     </div>
   );
 }

@@ -15,7 +15,7 @@ import { UsocialLogo } from "./UsocialLogo.jsx";
 import Auxfoto from "./auxfoto.png";
 import { Link as RouterLink } from "react-router-dom";
 
-export default function Admin() {
+export default function Reporte() {
   return (
     <div
       style={{

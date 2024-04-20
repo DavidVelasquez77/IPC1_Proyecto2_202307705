@@ -28,12 +28,18 @@ function registro(req, res) {
       contraseña,
     } = req.body;
 
-    const existeusuario = listadeusuarios.find(
-      (usuario) => usuario.carnet === carnet
-    );
-    if (existeusuario) {
+    const usuarioExistente = listadeusuarios.find((usuario) => usuario.carnet === carnet);
+    if (usuarioExistente) {
       return res.json({
         error: "el usuario con este carnet ya existe",
+      });
+    }
+
+    // Verificar si la contraseña cumple con los requisitos
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!regex.test(contraseña)) {
+      return res.json({
+        error: "La contraseña debe tener al menos 8 caracteres, entre estos caracteres deberá contar con al menos 1 mayúscula, 1 minúscula y 1 carácter especial.",
       });
     }
 
@@ -50,6 +56,7 @@ function registro(req, res) {
     listadeusuarios.push(nuevousuario);
     return res.json({
       message: "usuario registrado con exito ahora puedes iniciar sesion",
+      
     });
   } catch (error) {
     console.log(error);
@@ -58,7 +65,6 @@ function registro(req, res) {
     });
   }
 }
-
 function DatosUsuarios(req, res) {
   try {
     res.json({ usuarios: listadeusuarios });

@@ -1,6 +1,7 @@
 import { Input, Button } from "@nextui-org/react";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import Fondo from "./fondologin.jpg";
 
@@ -87,15 +88,30 @@ export default function Login() {
               style={{ color: "white" }}
             />
           </div>
-          <div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "20px",
+            }}
+          >
             <Button
               type="submit"
               color="primary"
               className="text-white"
               variant="shadow"
             >
-              Inicio de Sesión
+              Login
             </Button>
+            <div style={{ width: "10px" }}></div>
+            <div>
+              <Link to="/signup" style={{ textDecoration: 'none' }}>
+                <Button color="primary" variant="faded">
+                  Sign Up
+                </Button>
+              </Link>
+            </div>
           </div>
         </form>
       </div>
