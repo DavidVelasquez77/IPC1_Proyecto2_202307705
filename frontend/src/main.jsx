@@ -2,11 +2,15 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './pages/App.jsx'
 import Login from './pages/Login.jsx'
+import Admin from './pages/Admin.jsx'
+import SignUp from './pages/SignUp.jsx'
+import Home from './pages/Home.jsx'
 import './index.css'
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+
 
 const router = createBrowserRouter([
   {
@@ -14,12 +18,20 @@ const router = createBrowserRouter([
     element: <App/>
   },
   {
-    path: "/foro",
-    element: <h1>Página para mostrar los foros</h1>
+    path: "/signup",
+    element: <SignUp/>
   },
   {
     path: "/login",
     element: <Login/>
+  },
+  {
+    path: "/admin",
+    element: <Admin/>
+  },
+  {
+    path: "/home",
+    element: <Home/>
   }
 ]);
 

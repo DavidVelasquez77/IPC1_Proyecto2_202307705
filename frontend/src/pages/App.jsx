@@ -2,12 +2,12 @@
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button } from "@nextui-org/react";
 import { UsocialLogo } from "./UsocialLogo.jsx";
 import Fondo from "./fondo.png";
-import Fondo2 from "./fondo2.png"; // Importa la imagen de fondo2.png
-import Fondo3 from "./fondo3.png"; // Importa la imagen de fondo3.png
-import Fondo4 from "./fondo4.png"; // Importa la imagen de fondo4.png
-import mujer from "./mujer.png"; // Importa la imagen de mujer.png
-import desarrollador from "./desarrollador.png"; // Importa la imagen de desarrollador.png
-import soporte from "./soporte.png"; // Importa la imagen de soporte.png
+import Fondo2 from "./fondo2.png"; 
+import Fondo3 from "./fondo3.png"; 
+import Fondo4 from "./fondo4.png"; 
+import mujer from "./mujer.png"; 
+import desarrollador from "./desarrollador.png";
+import soporte from "./soporte.png"; 
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
@@ -49,8 +49,8 @@ export default function App() {
             <Link to="/login" style={{ color: 'white' }}>Login</Link>
             </NavbarItem>
             <NavbarItem>
-              <Button color="primary" href="#signup" variant="flat">
-                Sign Up
+            <Button color="secondary" style={{ backgroundColor: '#172554', color: '#6BC6D1' }}>
+                <Link to="/signup" style={{ color: '#6BC6D1', textDecoration: 'none' }}>Sign Up</Link>
               </Button>
             </NavbarItem>
           </NavbarContent>

@@ -1,10 +1,13 @@
 import { Input, Button } from "@nextui-org/react";
 import { useState } from "react";
+import { Navigate } from "react-router-dom";
+
 import Fondo from "./fondologin.jpg";
 
-function Login() {
-  const [carnet, setcarnet] = useState("");
-  const [contraseña, setcontraseña] = useState("");
+export default function Login() {
+  const [carnet, setCarnet] = useState("");
+  const [contraseña, setContraseña] = useState("");
+  const [redirectPath, setRedirectPath] = useState(null);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -20,18 +23,28 @@ function Login() {
       },
       body: JSON.stringify(JsonDatos),
     })
-      .then((response) => response.json())
-      .then((res) => {
-        if (res.status === 200) {
-          alert("Bienvenido");
-        } else if (res.status === 401) {
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.message === "inicio de sesion exitoso") {
+          if (data.usuario.isAdmin) {
+            alert(`Bienvenido administrador ${data.usuario.nombres} ${data.usuario.apellidos}`);
+            setRedirectPath("/admin"); 
+          } else {
+            alert(`Bienvenido usuario ${data.usuario.nombres} ${data.usuario.apellidos}`);
+            setRedirectPath("/home"); 
+          }
+        } else if (data.error === "el usuario no existe o la contraseña es incorrecta") {
           alert("Carnet o contraseña incorrecta");
         } else {
-          console.log(res);  
+          console.log(data);
         }
       })
       .catch((error) => console.error(error));
   };
+
+  if (redirectPath) {
+    return <Navigate to={redirectPath} />;
+  }
   return (
     <main
       className="flex justify-center items-center h-screen"
@@ -51,7 +64,7 @@ function Login() {
             <Input
               type="text"
               label="carnet"
-              onChange={(e) => setcarnet(e.target.value)}
+              onChange={(e) => setCarnet(e.target.value)}
               value={carnet}
               autoComplete="off"
               className="w-full bg-transparent text-white border border-white"
@@ -63,7 +76,7 @@ function Login() {
               type="password"
               label="contraseña"
               value={contraseña}
-              onChange={(e) => setcontraseña(e.target.value)}
+              onChange={(e) => setContraseña(e.target.value)}
               className="w-full bg-transparent text-white border border-white"
               style={{ color: "white" }}
             />
@@ -76,6 +89,4 @@ function Login() {
         </form>
       </div>
     </main>
-  );
-}
-export default Login;
+  )}
