@@ -13,7 +13,7 @@ import {
 import { UsocialLogo } from "./UsocialLogo.jsx";
 import { Link as RouterLink } from "react-router-dom";
 
-export default function Home() {
+export default function Post() {
   return (
     <div
       style={{

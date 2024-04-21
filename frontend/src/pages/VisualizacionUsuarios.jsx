@@ -10,6 +10,12 @@ import {
   Dropdown,
   DropdownMenu,
   Avatar,
+  Table,
+  TableHeader,
+  TableBody,
+  TableColumn,
+  TableRow,
+  TableCell,
 } from "@nextui-org/react";
 import { UsocialLogo } from "./UsocialLogo.jsx";
 import Auxfoto from "./auxfoto.png";
@@ -94,6 +100,33 @@ export default function VisualizacionUsuarios() {
           </Dropdown>
         </NavbarContent>
       </Navbar>
+
+      <Table aria-label="Example static collection table" >
+        <TableHeader>
+          <TableColumn>Código/Carnet</TableColumn>
+          <TableColumn>Nombres</TableColumn>
+          <TableColumn>Apellidos</TableColumn>
+          <TableColumn>Genero</TableColumn>
+          <TableColumn>Facultad</TableColumn>
+          <TableColumn>Carrera</TableColumn>
+          <TableColumn>Correo</TableColumn>
+          <TableColumn>Contraseña</TableColumn>
+          <TableColumn>Acciones</TableColumn>
+        </TableHeader>
+        <TableBody>
+          <TableRow key="1">
+            <TableCell style={{ color: "white" }}>Tony Reichert</TableCell>
+            <TableCell style={{ color: "white" }}>CEO</TableCell>
+            <TableCell style={{ color: "white" }}>Active</TableCell>
+            <TableCell style={{ color: "white" }}>Tony Reichert</TableCell>
+            <TableCell style={{ color: "white" }}>CEO</TableCell>
+            <TableCell style={{ color: "white" }}>Active</TableCell>
+            <TableCell style={{ color: "white" }}>CEO</TableCell>
+            <TableCell style={{ color: "white" }}>Active</TableCell>
+            <TableCell style={{ color: "white" }}>Active</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
     </div>
   );
 }

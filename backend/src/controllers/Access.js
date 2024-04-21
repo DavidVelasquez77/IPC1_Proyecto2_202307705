@@ -128,6 +128,7 @@ function ActualizarUsuarios(req, res) {
       (usuario) => usuario.carnet === carnet
     );
     if (usuario) {
+      usuario.carnet = carnet;
       usuario.nombres = nombres;
       usuario.apellidos = apellidos;
       usuario.genero = genero;

@@ -3,12 +3,14 @@ import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
+
 import Fondo from "./fondologin.jpg";
 
 export default function Login() {
   const [carnet, setCarnet] = useState("");
   const [contraseña, setContraseña] = useState("");
   const [redirectPath, setRedirectPath] = useState(null);
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -31,8 +33,10 @@ export default function Login() {
             alert(
               `Bienvenido administrador ${data.usuario.nombres} ${data.usuario.apellidos}`
             );
+          
             setRedirectPath("/admin");
           } else {
+            console.log(data);
             alert(
               `Bienvenido usuario ${data.usuario.nombres} ${data.usuario.apellidos}`
             );

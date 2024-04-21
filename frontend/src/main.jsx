@@ -9,11 +9,14 @@ import VisualizacionUsuarios from './pages/VisualizacionUsuarios.jsx'
 import VisualizacionPost from './pages/VisualizacionPost.jsx'
 import CargaMasiva from './pages/CargaMasiva.jsx'
 import Reporte from './pages/Reporte.jsx'
+import Post from './pages/Post.jsx'
 import './index.css'
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import EditarPerfil from './pages/EditarPerfil.jsx'
+import Tendencias from './pages/Tendencias.jsx'
 
 
 const router = createBrowserRouter([
@@ -52,8 +55,19 @@ const router = createBrowserRouter([
   {
     path: "/reporte",
     element: <Reporte/>
+  },
+  {
+    path: "/post",
+    element: <Post/>
+  },
+  {
+    path: "/editarperfil",
+    element: <EditarPerfil/>
+  },
+  {
+    path: "/tendencias",
+    element: <Tendencias/>
   }
-
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
