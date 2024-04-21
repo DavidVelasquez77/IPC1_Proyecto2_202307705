@@ -44,11 +44,23 @@ export default function VisualizacionPost() {
           justify="center"
           style={{ color: "white" }}
         >
-          <NavbarItem>
-            <RouterLink color="foreground" to="/cargamasiva">
-              Carga Masiva
-            </RouterLink>
-          </NavbarItem>
+<NavbarItem>
+  <Dropdown placement="bottom-start">
+    <DropdownTrigger>
+      <Link href="#" aria-current="page" color="#FFFFFF">
+        Carga Masiva
+      </Link>
+    </DropdownTrigger>
+    <DropdownMenu aria-label="Visualización de Datos" variant="flat">
+      <DropdownItem key="Usuarios">
+        <RouterLink to="/cargamasivausuario">Usuarios</RouterLink>
+      </DropdownItem>
+      <DropdownItem key="Publicaciones">
+        <RouterLink to="/cargamasivapost">Publicaciones</RouterLink>
+      </DropdownItem>
+    </DropdownMenu>
+  </Dropdown>
+</NavbarItem>
           <NavbarItem>
             <Dropdown placement="bottom-start">
               <DropdownTrigger>

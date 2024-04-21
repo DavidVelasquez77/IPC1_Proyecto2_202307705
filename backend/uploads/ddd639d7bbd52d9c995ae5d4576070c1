@@ -1,0 +1,22 @@
+[
+  {
+    "carnet": "20210001",
+    "nombres": "Juan",
+    "apellidos": "Pérez",
+    "genero": "Masculino",
+    "facultad": "Ingeniería",
+    "carrera": "Ingeniería Informática",
+    "correo_electronico": "juan@example.com",
+    "contraseña": "P@ssw0rd"
+  },
+  {
+    "carnet": "20210002",
+    "nombres": "María",
+    "apellidos": "Gómez",
+    "genero": "Femenino",
+    "facultad": "Ciencias",
+    "carrera": "Biología",
+    "correo_electronico": "maria@example.com",
+    "contraseña": "P@ssw0rd"
+  }
+]

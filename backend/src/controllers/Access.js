@@ -173,6 +173,10 @@ function EliminarUsuarios(req, res) {
     });
   }
 }
+
+
+
+
 module.exports = {
   registro,
   DatosUsuarios,

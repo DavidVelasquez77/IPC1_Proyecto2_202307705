@@ -9,6 +9,7 @@
 //--------------POST----------------
     router.post('/registro', registro);
     router.post('/iniciarSesion', iniciarSesion);
+    
 //--------------PUT----------------
     router.put('/ActualizarUsuarios',  ActualizarUsuarios);
 //--------------DELETE----------------

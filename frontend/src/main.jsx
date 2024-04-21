@@ -7,7 +7,8 @@ import SignUp from './pages/SignUp.jsx'
 import Home from './pages/Home.jsx'
 import VisualizacionUsuarios from './pages/VisualizacionUsuarios.jsx'
 import VisualizacionPost from './pages/VisualizacionPost.jsx'
-import CargaMasiva from './pages/CargaMasiva.jsx'
+import CargaMasivaUsuario from './pages/CargaMasivaUsuario.jsx'
+import CargaMasivaPost from './pages/CargaMasivaPost.jsx'
 import Reporte from './pages/Reporte.jsx'
 import Post from './pages/Post.jsx'
 import './index.css'
@@ -49,8 +50,13 @@ const router = createBrowserRouter([
     element: <VisualizacionPost/>
   },
   {
-    path: "/cargamasiva",
-    element: <CargaMasiva/>
+    path: "/cargamasivausuario",
+    element: <CargaMasivaUsuario/>
+  },
+  {
+    path: "/cargamasivapost",
+    element: <CargaMasivaPost/>
+
   },
   {
     path: "/reporte",
