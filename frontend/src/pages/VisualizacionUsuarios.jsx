@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import Fondo2 from "./fondo2.png";
 import {
   Navbar,
@@ -16,25 +17,79 @@ import {
   TableColumn,
   TableRow,
   TableCell,
+  Button,
+
 } from "@nextui-org/react";
 import { UsocialLogo } from "./UsocialLogo.jsx";
 import Auxfoto from "./auxfoto.png";
 import { Link as RouterLink } from "react-router-dom";
-
+import { Accordion, AccordionSummary, AccordionDetails } from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Papa from 'papaparse';
 export default function VisualizacionUsuarios() {
+  const [usuarios, setUsuarios] = useState([]);
+
+  useEffect(() => {
+    // Realizar solicitud GET para obtener la lista de usuarios
+    fetch("http://localhost:5000/DatosUsuarios")
+      .then(response => response.json())
+      .then(data => {
+        setUsuarios(data.usuarios);
+      })
+      .catch(error => console.error('Error:', error));
+  }, []);
+
+
+
+const handleEliminarUsuario = (carnet) => {
+  fetch(`http://localhost:5000/EliminarUsuarios`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ carnet }),
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log(data);
+    if (data.message === "usuario eliminado con exito") {
+      // Recarga la página después de eliminar el usuario
+      window.location.reload();
+    }
+    // Puedes mostrar algún mensaje de éxito o manejar la respuesta del servidor según necesites
+  })
+  .catch(error => console.error('Error:', error));
+};
+
+  const exportarUsuariosACSV = () => {
+  const csv = Papa.unparse(usuarios);
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+  link.setAttribute('href', url);
+  link.setAttribute('download', 'usuarios.csv');
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
   return (
     <div
-      style={{
-        backgroundImage: `url(${Fondo2})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        minHeight: "100vh",
-      }}
+    style={{
+      backgroundImage: `url(${Fondo2})`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      minHeight: "100vh",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center", // Centra el contenido horizontalmente
+    }}
     >
       <Navbar>
         <NavbarBrand>
           <UsocialLogo />
-          <p className="font-bold text-inherit" style={{ color: "white" }}>
+          <p className="font-bold text-white" style={{ color: "white" }}>
             USocial
           </p>
         </NavbarBrand>
@@ -86,8 +141,8 @@ export default function VisualizacionUsuarios() {
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
               <DropdownItem key="profile" className="h-14 gap-2">
-                <p className="font-semibold">Signed in as</p>
-                <p className="font-semibold">ipc11s2024@email.com</p>
+                <p className="font-semibold text-black">Signed in as</p>
+                <p className="font-semibold text-">ipc11s2024@email.com</p>
               </DropdownItem>
               <DropdownItem
                 href="http://localhost:5173/"
@@ -101,32 +156,66 @@ export default function VisualizacionUsuarios() {
         </NavbarContent>
       </Navbar>
 
-      <Table aria-label="Example static collection table" >
-        <TableHeader>
-          <TableColumn>Código/Carnet</TableColumn>
-          <TableColumn>Nombres</TableColumn>
-          <TableColumn>Apellidos</TableColumn>
-          <TableColumn>Genero</TableColumn>
-          <TableColumn>Facultad</TableColumn>
-          <TableColumn>Carrera</TableColumn>
-          <TableColumn>Correo</TableColumn>
-          <TableColumn>Contraseña</TableColumn>
-          <TableColumn>Acciones</TableColumn>
-        </TableHeader>
-        <TableBody>
-          <TableRow key="1">
-            <TableCell style={{ color: "white" }}>Tony Reichert</TableCell>
-            <TableCell style={{ color: "white" }}>CEO</TableCell>
-            <TableCell style={{ color: "white" }}>Active</TableCell>
-            <TableCell style={{ color: "white" }}>Tony Reichert</TableCell>
-            <TableCell style={{ color: "white" }}>CEO</TableCell>
-            <TableCell style={{ color: "white" }}>Active</TableCell>
-            <TableCell style={{ color: "white" }}>CEO</TableCell>
-            <TableCell style={{ color: "white" }}>Active</TableCell>
-            <TableCell style={{ color: "white" }}>Active</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+  <Button
+      color="primary"
+      variant="shadow"
+      onClick={exportarUsuariosACSV}
+      style={{ marginBottom: "20px" }} // Espacio entre el botón y la tabla
+    >
+      Exportar a CSV
+    </Button>
+    <Table aria-label="Tabla de Usuarios" style={{ width: "80%" }}>
+    <TableHeader>
+      <TableColumn>Código/Carnet</TableColumn>
+      <TableColumn>Nombres</TableColumn>
+      <TableColumn>Apellidos</TableColumn>
+      <TableColumn>Género</TableColumn>
+      <TableColumn>Facultad</TableColumn>
+      <TableColumn>Carrera</TableColumn>
+      <TableColumn>Correo Electrónico</TableColumn>
+      <TableColumn>Contraseña</TableColumn>
+      <TableColumn>Acciones</TableColumn>
+    </TableHeader>
+    <TableBody>
+      {usuarios.map(usuario => (
+        <TableRow key={usuario.carnet}>
+          <TableCell style={{ color: "white" }}>{usuario.carnet}</TableCell>
+          <TableCell style={{ color: "white" }}>{usuario.nombres}</TableCell>
+          <TableCell style={{ color: "white" }}>{usuario.apellidos}</TableCell>
+          <TableCell style={{ color: "white" }}>{usuario.genero}</TableCell>
+          <TableCell style={{ color: "white" }}>{usuario.facultad}</TableCell>
+          <TableCell style={{ color: "white" }}>{usuario.carrera}</TableCell>
+          <TableCell style={{ color: "white" }}>{usuario.correo_electronico}</TableCell>
+          <TableCell style={{ color: "white" }}>{usuario.contraseña}</TableCell>
+          <TableCell>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Button color="primary">Visualizar</Button>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <p>Nombres: {usuario.nombres}</p>
+                  <p>Apellidos: {usuario.apellidos}</p>
+                  <p>Género: {usuario.genero}</p>
+                  <p>Facultad: {usuario.facultad}</p>
+                  <p>Carrera: {usuario.carrera}</p>
+                  <p>Correo Electrónico: {usuario.correo_electronico}</p>
+                  <p>Contraseña: {usuario.contraseña}</p>
+                </AccordionDetails>
+              </Accordion>
+              <Button onClick={() => handleEliminarUsuario(usuario.carnet)} color="danger">Eliminar</Button>
+            </div>
+          </TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+
+
     </div>
   );
 }

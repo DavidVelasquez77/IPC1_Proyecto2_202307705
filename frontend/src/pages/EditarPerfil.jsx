@@ -17,7 +17,7 @@ export default function EditarPerfil() {
     event.preventDefault();
 
     // Verificar si la contraseña cumple con los requisitos
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!-+.%*?&])[A-Za-z\d@+.,$!%*?&]{8,}$/;
     if (!regex.test(contraseña)) {
       alert("La contraseña debe tener al menos 8 caracteres, entre estos caracteres deberá contar con al menos 1 mayúscula, 1 minúscula y 1 carácter especial.");
       return;

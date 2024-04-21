@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-
 import Fondo from "./fondologin.jpg";
 
 export default function Login() {
