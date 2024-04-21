@@ -11,9 +11,18 @@ import {
   Avatar,
 } from "@nextui-org/react";
 import { UsocialLogo } from "./UsocialLogo.jsx";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export default function Home() {
+  const navigate = useNavigate(); // Obtiene la función de navegación
+
+  const handleLogout = () => {
+    Cookies.remove("usuario");
+    // Redirige al usuario a la página de inicio de sesión
+    navigate("/login");
+  };
+
   return (
     <div
       style={{
@@ -76,8 +85,7 @@ export default function Home() {
                 <p className="font-semibold">Signed in as</p>
               </DropdownItem>
               <DropdownItem
-                href="http://localhost:5173/"
-                key="logout"
+                onClick={handleLogout} // Agrega el onClick para llamar a la función de desloguear
                 color="danger"
               >
                 Log Out

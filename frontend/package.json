@@ -18,6 +18,7 @@
     "colors": "^1.4.0",
     "cookie": "^0.6.0",
     "framer-motion": "^11.0.28",
+    "js-cookie": "^3.0.5",
     "papaparse": "^5.4.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.2",

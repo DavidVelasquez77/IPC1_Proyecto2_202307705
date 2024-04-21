@@ -43,11 +43,15 @@ export default function EditarPerfil() {
     })
     .then(response => response.json())
     .then(data => {
-      console.log(data);
-      alert("Registro correcto");
-    })
-    .catch(error => console.error('Error:', error));
-  };
+      if (data.error) {
+          alert(data.error); // Mostrar el mensaje de error si existe
+      } else {
+          console.log(data);
+          alert("Registro correcto");
+      }
+  })
+  .catch(error => console.error('Error:', error));
+};
 
   return (
     <div

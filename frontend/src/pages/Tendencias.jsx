@@ -11,9 +11,18 @@ import {
   Avatar,
 } from "@nextui-org/react";
 import { UsocialLogo } from "./UsocialLogo.jsx";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export default function Tendencias() {
+  const navigate = useNavigate(); // Obtiene la función de navegación
+
+  const handleLogout = () => {
+    Cookies.remove("usuario");
+    // Redirige al usuario a la página de inicio de sesión
+    navigate("/login");
+  };
+
   return (
     <div
       style={{
@@ -75,11 +84,7 @@ export default function Tendencias() {
               <DropdownItem key="profile" className="h-14 gap-2">
                 <p className="font-semibold">Signed in as</p>
               </DropdownItem>
-              <DropdownItem
-                href="http://localhost:5173/"
-                key="logout"
-                color="danger"
-              >
+              <DropdownItem onClick={handleLogout} color="danger">
                 Log Out
               </DropdownItem>
             </DropdownMenu>

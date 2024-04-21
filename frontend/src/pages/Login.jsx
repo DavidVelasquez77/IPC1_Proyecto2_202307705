@@ -2,14 +2,13 @@ import { Input, Button } from "@nextui-org/react";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-
+import Cookies from "js-cookie";
 import Fondo from "./fondologin.jpg";
 
 export default function Login() {
   const [carnet, setCarnet] = useState("");
   const [contraseña, setContraseña] = useState("");
   const [redirectPath, setRedirectPath] = useState(null);
-
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -28,11 +27,14 @@ export default function Login() {
       .then((res) => res.json())
       .then((data) => {
         if (data.message === "inicio de sesion exitoso") {
+          // Almacena los datos del usuario en una cookie
+          Cookies.set("usuario", JSON.stringify(data.usuario));
+
           if (data.usuario.isAdmin) {
             alert(
               `Bienvenido administrador ${data.usuario.nombres} ${data.usuario.apellidos}`
             );
-          
+
             setRedirectPath("/admin");
           } else {
             console.log(data);
@@ -109,7 +111,7 @@ export default function Login() {
             </Button>
             <div style={{ width: "10px" }}></div>
             <div>
-              <Link to="/signup" style={{ textDecoration: 'none' }}>
+              <Link to="/signup" style={{ textDecoration: "none" }}>
                 <Button color="primary" variant="faded">
                   Sign Up
                 </Button>
