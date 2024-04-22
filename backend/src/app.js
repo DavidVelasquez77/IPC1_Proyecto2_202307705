@@ -3,6 +3,8 @@
 
     const app = express();
 
+    const bodyParser = require('body-parser');
+    app.use(bodyParser.json({ limit: '15mb'}));
     app.use(express.json());
     app.use(cors());
 

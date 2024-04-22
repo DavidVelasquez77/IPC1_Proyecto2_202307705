@@ -1,6 +1,7 @@
-const { listadeusuarios } = require("../Lista/ListadeDatos");
+const { listadeusuarios , listadepost } = require("../Lista/ListadeDatos");
 const { Usuario } = require("../clases/Usuarios");
-
+const { Post } = require("../clases/Post");
+var idPublicaciones = 0
 // Crear usuario administrador
 const admin = new Usuario(
   "12024",
@@ -173,9 +174,74 @@ function EliminarUsuarios(req, res) {
     });
   }
 }
+function crearPost(req,res){
+  try {
+    const carnet = req.body.carnet;
+    const descripcion = req.body.descripcion;
+    const imagen = req.body.imagen;
+
+    idPublicaciones = idPublicaciones + 1;
+
+    const nuevoPost = new Post(idPublicaciones, carnet, descripcion, imagen);
+
+    // Asociar el post con el usuario que lo creó
+    const usuario = listadeusuarios.find(user => user.carnet === carnet);
+    if (!usuario) {
+      return res.json({ error: "El usuario no existe." });
+    }
+    nuevoPost.user = usuario.carnet;
 
 
+    listadepost.push(nuevoPost);
 
+
+    res.json({
+      message: "Post creado con exito",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      error: "error en la creacion de post",
+    });
+  }
+}
+
+
+function getPost(req, res){
+  try {
+
+    const postsusuario = [];
+
+    for (const post of listadepost) {
+
+        const usuario = listadeusuarios.find(user => user.carnet === post.user);
+
+        if (usuario) {
+            const postusuario = {
+                id: post.id,
+                descripcion: post.descripcion,
+                imagen: post.imagen,
+                fechaHora: post.fechaHora,
+                user: usuario.nombres // Corregido: Mostrar el nombre del usuario en lugar del carnet
+            };
+
+            postsusuario.push(postusuario);
+        }
+    }
+
+    postsusuario.reverse();
+    res.json(
+        { publicaciones: postsusuario }
+    );
+
+  } catch (error) {
+    return res.json(
+        {
+            error: "Ocurrió un error al obtener los posts"
+        }
+    )
+  }
+}
 
 module.exports = {
   registro,
@@ -183,4 +249,6 @@ module.exports = {
   iniciarSesion,
   ActualizarUsuarios,
   EliminarUsuarios,
+  crearPost,
+  getPost
 };

@@ -1,4 +1,6 @@
+import React, { useState } from "react";
 import Fondohome from "./fondohome.png";
+import { makeStyles } from "@material-ui/core/styles";
 import {
   Navbar,
   NavbarBrand,
@@ -13,8 +15,105 @@ import {
 import { UsocialLogo } from "./UsocialLogo.jsx";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import {
+  TextField,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Switch,
+} from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
 
 export default function Post() {
+  //------------------------CONSTANTES---------------------------
+  const classes = useStyles();
+
+  const [contenido, setContenido] = useState("");
+  const [categoria, setCategoria] = useState("");
+  const [anonimo, setAnonimo] = useState(false);
+  const [imagen, setImagen] = useState("");
+  const [imagenURL, setImagenURL] = useState("");
+  const usuario = Cookies.get("usuario");
+  const datosUsuario = JSON.parse(usuario);
+
+  //-----------------------FUNCIONES--------------------------------
+  const handleImagenChange = (event) => {
+    const reader = new FileReader();
+    const file = event.target.files[0];
+
+    reader.onloadend = () => {
+      setImagen(reader.result);
+      setImagenURL(reader.result);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleContenido = (event) => {
+    setContenido(event.target.value);
+  };
+
+  const handleCategoria = (event) => {
+    setCategoria(event.target.value);
+  };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("datosUsuario:", datosUsuario);
+    if (!datosUsuario || !datosUsuario.carnet) {
+      console.error("datosUsuario o datosUsuario.carnet no están definidos");
+      return;
+    }
+    const dataJson = {
+      carnet: datosUsuario.carnet, // Asegúrate de que datosUsuario y carnet existen
+      descripcion: contenido, // Usamos contenido que es el estado para el contenido del post
+      imagen: imagen, // Usamos imagen que es el estado para la imagen del post
+    };
+
+    fetch("http://localhost:5000/crearPost", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataJson),
+    })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.json();
+    })
+      .then((data) => {
+        console.log("Respuesta del servidor:", data);
+        if (data.mensaje) {
+          alert(data.mensaje);
+        } else {
+          alert('Post creado con éxito');
+        }
+        setImagenURL("");
+      })
+    .catch((error) => console.error('Error en la solicitud:', error));
+  };
+  const handleAnonimo = (event) => {
+    setAnonimo(event.target.checked);
+    // Aquí puedes agregar más lógica según sea necesario
+  };
+  const handleCancel = () => {
+    // Aquí puedes manejar la cancelación del post
+  };
+
   const navigate = useNavigate(); // Obtiene la función de navegación
 
   const handleLogout = () => {
@@ -91,6 +190,83 @@ export default function Post() {
           </Dropdown>
         </NavbarContent>
       </Navbar>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "calc(100vh - 60px)",
+        }}
+      >
+        <div
+          style={{
+            backgroundColor: "rgba(255, 255, 255, 0.9)",
+            maxWidth: "700px",
+            padding: "20px",
+            borderRadius: "10px",
+          }}
+        >
+          <form onSubmit={handleSubmit}>
+            <h1 style={{ fontWeight: "bold", fontSize: "2em" }}>Nuevo Post</h1>
+            <TextField
+              label="¿Qué quieres escribir en tu post?"
+              value={contenido}
+              onChange={handleContenido}
+              multiline
+              rows={4}
+              fullWidth
+              required // Agregamos el atributo required
+            />
+            <FormControl className={classes.formControl} required>
+              <InputLabel id="categoria-label">Categoría</InputLabel>
+              <Select
+                labelId="categoria-label"
+                value={categoria}
+                onChange={handleCategoria}
+                required // Agregamos el atributo required
+              >
+                <MenuItem value={"Aviso importante"}>Aviso importante</MenuItem>
+                <MenuItem value={"Divertido"}>Divertido</MenuItem>
+                <MenuItem value={"Académico"}>Académico</MenuItem>
+                <MenuItem value={"Variedad"}>Variedad</MenuItem>
+              </Select>
+            </FormControl>
+            <Switch
+              checked={anonimo}
+              onChange={handleAnonimo}
+              inputProps={{ "aria-label": "primary checkbox" }}
+            />
+            {anonimo
+              ? "¿Quieres publicarlo de forma anónima? (Sí)"
+              : "¿Quieres publicarlo de forma anónima? (No)"}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImagenChange}
+    
+            />{" "}
+            {/* Agregamos el atributo required */}
+            {imagenURL && (
+              <img
+                src={imagenURL}
+                alt="Preview"
+                style={{ maxWidth: "400px" }}
+              />
+            )}
+            <Button type="submit" variant="contained" color="primary">
+              Publicar
+            </Button>
+            <Button
+              onClick={handleCancel}
+              variant="contained"
+              color="secondary"
+            >
+              Cancelar
+            </Button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

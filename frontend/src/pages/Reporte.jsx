@@ -1,3 +1,4 @@
+import React, { useState, useEffect} from 'react'; 
 import Fondo2 from "./fondo2.png";
 import {
   Navbar,
@@ -106,6 +107,9 @@ export default function Reporte() {
           </Dropdown>
         </NavbarContent>
       </Navbar>
+
+
+
     </div>
   );
 }

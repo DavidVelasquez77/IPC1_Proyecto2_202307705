@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import Fondohome from "./fondohome.png";
 import {
   Navbar,
@@ -13,10 +14,38 @@ import {
 import { UsocialLogo } from "./UsocialLogo.jsx";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  Button,
+} from "@material-ui/core";
 
 export default function Home() {
+  const [datosUser, setDatosUser] = useState(null);
   const navigate = useNavigate(); // Obtiene la función de navegación
+  const [listaObjetos, setListaObjetos] = useState([]);
 
+  useEffect(() => {
+    const usuario = JSON.parse(Cookies.get("usuario") || "{}");
+    setDatosUser(usuario);
+
+    fetch(`http://localhost:5000/getPost`, {
+      method: "GET", // Utiliza el método POST
+      headers: {
+        "Content-Type": "application/json", // Establece el tipo de contenido de la solicitud como JSON
+      },
+    })
+      .then((response) => response.json())
+      .then((res) => {
+        setListaObjetos(res.publicaciones);
+      })
+      .catch((error) => console.error(error));
+  }, []);
+  function viewIdPost(postId) {
+    console.log("ID del post:", postId);
+  }
   const handleLogout = () => {
     Cookies.remove("usuario");
     // Redirige al usuario a la página de inicio de sesión
@@ -94,6 +123,32 @@ export default function Home() {
           </Dropdown>
         </NavbarContent>
       </Navbar>
+
+      {/* Mostrar los posts */}
+      {listaObjetos.length > 0 ? (
+        listaObjetos.map((objeto) => (
+          <Card key={objeto.id} style={{ maxWidth: 345, margin: "20px auto" }}>
+            <CardHeader />
+            <p>Usuario: {objeto.user}</p>
+            <p>Fecha: {new Date(objeto.fechaHora).toLocaleString()}</p>
+            {objeto.imagen && (
+              <CardMedia
+                component="img"
+                height="140"
+                image={objeto.imagen}
+                alt="Imagen del post"
+              />
+            )}
+            <CardContent>
+              sssss
+              <p className="card-description">{objeto.descripcion}</p>
+              <Button onClick={() => viewIdPost(objeto.id)}>Comentarios</Button>
+            </CardContent>
+          </Card>
+        ))
+      ) : (
+        <p>No hay publicaciones disponibles.</p>
+      )}
     </div>
   );
 }
