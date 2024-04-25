@@ -81,6 +81,7 @@ export default function Post() {
       descripcion: contenido, 
       imagen: imagen, 
       categoria: categoria,
+      anonimo: anonimo,
     };
 
     fetch("http://localhost:5000/crearPost", {

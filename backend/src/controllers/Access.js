@@ -174,36 +174,36 @@ function EliminarUsuarios(req, res) {
     });
   }
 }
-function crearPost(req,res){
+function crearPost(req, res) {
   try {
     const carnet = req.body.carnet;
     const descripcion = req.body.descripcion;
     const imagen = req.body.imagen;
     const categoria = req.body.categoria;
-    
+    const anonimo = req.body.anonimo || false; // Si no se especifica, por defecto no es anónimo
 
-    idPublicaciones = idPublicaciones + 1;
+    idPublicaciones++; // Incrementa el ID de publicaciones
 
-    const nuevoPost = new Post(idPublicaciones, carnet, descripcion, imagen, categoria);
+    const nuevoPost = new Post(idPublicaciones, carnet, descripcion, imagen, categoria, anonimo);
 
-    // Asociar el post con el usuario que lo creó
-    const usuario = listadeusuarios.find(user => user.carnet === carnet);
-    if (!usuario) {
-      return res.json({ error: "El usuario no existe." });
+    // Si el post es anónimo, no asociamos a ningún usuario
+    if (!anonimo) {
+      const usuario = listadeusuarios.find(user => user.carnet === carnet);
+      if (!usuario) {
+        return res.json({ error: "El usuario no existe." });
+      }
+      nuevoPost.user = usuario.carnet;
     }
-    nuevoPost.user = usuario.carnet;
-
 
     listadepost.push(nuevoPost);
 
-
     res.json({
-      message: "Post creado con exito",
+      message: "Post creado con éxito",
     });
   } catch (error) {
     console.log(error);
     return res.json({
-      error: "error en la creacion de post",
+      error: "Error en la creación de post",
     });
   }
 }
@@ -218,7 +218,8 @@ function getPost(req, res){
 
         const usuario = listadeusuarios.find(user => user.carnet === post.user);
 
-        if (usuario) {
+        // Verificar si el usuario existe y si el post es anónimo
+        if (usuario && !post.anonimo) {
             const postusuario = {
                 id: post.id,
                 descripcion: post.descripcion,
@@ -231,8 +232,21 @@ function getPost(req, res){
                 categoria: post.categoria,
                 
             };
-
             postsusuario.push(postusuario);
+        } else if (post.anonimo) {
+            // Si el post es anónimo, establecer los valores predeterminados
+            const postAnonimo = {
+                id: post.id,
+                descripcion: post.descripcion,
+                imagen: post.imagen,
+                fechaHora: post.fechaHora,
+                user: "Usuario ",
+                apellidos: "anónimo",
+                carrera: "San Carlos de Guatemala ",
+                facultad: "Universidad",
+                categoria: post.categoria,
+            };
+            postsusuario.push(postAnonimo);
         }
     }
 

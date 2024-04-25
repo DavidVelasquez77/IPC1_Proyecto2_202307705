@@ -21,7 +21,8 @@ import {
   CardMedia,
   Button,
 } from "@material-ui/core";
-
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import CommentIcon from '@material-ui/icons/Comment';
 export default function Home() {
   const [datosUser, setDatosUser] = useState(null);
   const navigate = useNavigate(); // Obtiene la función de navegación
@@ -140,49 +141,64 @@ export default function Home() {
 
       {/* Mostrar los posts */}
       {listaObjetos.length > 0 ? (
-        listaObjetos.map((objeto) => (
-          <Card key={objeto.id} style={{ maxWidth: 500, margin: "20px auto" }}>
-            <CardHeader />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <div>
-                <p>
-                  <strong>
-                    {objeto.user} {objeto.apellidos}
-                  </strong>
-                </p>
-                <p>
-                  {objeto.facultad} ({objeto.carrera})
-                </p>
-                <p
-                  style={{
-                    backgroundColor: getHighlightColor(objeto.categoria),
-                    borderRadius: "5px",
-                    display: "inline-block",
-                    padding: "2px 4px",
-                  }}
-                >
-                  {objeto.categoria}
-                </p>
-              </div>
-              <p>Fecha: {new Date(objeto.fechaHora).toLocaleString()}</p>
+  listaObjetos.map((objeto) => (
+    <Card key={objeto.id} style={{ maxWidth: 500, margin: "20px auto" }}>
+      <CardHeader />
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div>
+          {/* Verifica si la publicación es anónima */}
+          {objeto.anonimo ? (
+            <p>
+              <strong>Usuario anónimo</strong>
+            </p>
+          ) : (
+            <p>
+              <strong>
+                {objeto.user} {objeto.apellidos}
+              </strong>
+            </p>
+          )}
+          {/* Muestra la información del usuario si la publicación no es anónima */}
+          {!objeto.anonimo && (
+            <div>
+              <p>
+                {objeto.facultad} ({objeto.carrera})
+              </p>
             </div>
-            {objeto.imagen && (
-              <CardMedia
-                component="img"
-                height="140"
-                image={objeto.imagen}
-                alt="Imagen del post"
-              />
-            )}
-            <CardContent>
-              <p className="card-description">{objeto.descripcion}</p>
-              <Button onClick={() => viewIdPost(objeto.id)}>Comentarios</Button>
-            </CardContent>
-          </Card>
-        ))
-      ) : (
-        <p>No hay publicaciones disponibles.</p>
+          )}
+          <p
+            style={{
+              backgroundColor: getHighlightColor(objeto.categoria),
+              borderRadius: "5px",
+              display: "inline-block",
+              padding: "2px 4px",
+            }}
+          >
+            {objeto.categoria}
+          </p>
+        </div>
+        <p>Fecha: {new Date(objeto.fechaHora).toLocaleString()}</p>
+      </div>
+      {objeto.imagen && (
+        <CardMedia
+          component="img"
+          height="140"
+          image={objeto.imagen}
+          alt="Imagen del post"
+        />
       )}
+<CardContent>
+  <p className="card-description">{objeto.descripcion}</p>
+  <div style={{ display: 'flex', gap: '10px' }}>
+    <Button startIcon={<CommentIcon />} style={{ backgroundColor: '#C133FF', color: 'white' }} onClick={() => viewIdPost(objeto.id)}>Comentarios</Button>
+    <Button startIcon={<ThumbUpIcon />} style={{ backgroundColor: 'blue', color: 'white' }} color="primary">Me gusta</Button>
+  </div>
+</CardContent>
+    </Card>
+  ))
+) : (
+  <p>No hay publicaciones disponibles.</p>
+)}
     </div>
   );
 }
