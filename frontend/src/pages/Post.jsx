@@ -77,9 +77,9 @@ export default function Post() {
       return;
     }
     const dataJson = {
-      carnet: datosUsuario.carnet, // Asegúrate de que datosUsuario y carnet existen
-      descripcion: contenido, // Usamos contenido que es el estado para el contenido del post
-      imagen: imagen, // Usamos imagen que es el estado para la imagen del post
+      carnet: datosUsuario.carnet,  
+      descripcion: contenido, 
+      imagen: imagen, 
     };
 
     fetch("http://localhost:5000/crearPost", {
@@ -111,9 +111,14 @@ export default function Post() {
     // Aquí puedes agregar más lógica según sea necesario
   };
   const handleCancel = () => {
-    // Aquí puedes manejar la cancelación del post
+    // Limpiar los campos y resetear el estado al estado inicial
+    setContenido("");
+    setCategoria("");
+    setAnonimo(false);
+    setImagen("");
+    setImagenURL("");
   };
-
+  
   const navigate = useNavigate(); // Obtiene la función de navegación
 
   const handleLogout = () => {

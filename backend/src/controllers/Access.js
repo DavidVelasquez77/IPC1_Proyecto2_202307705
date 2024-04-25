@@ -222,7 +222,11 @@ function getPost(req, res){
                 descripcion: post.descripcion,
                 imagen: post.imagen,
                 fechaHora: post.fechaHora,
-                user: usuario.nombres // Corregido: Mostrar el nombre del usuario en lugar del carnet
+                user: usuario.nombres,
+                apellidos: usuario.apellidos,
+                carrera: usuario.carrera,
+                facultad: usuario.facultad, 
+                
             };
 
             postsusuario.push(postusuario);
@@ -243,6 +247,44 @@ function getPost(req, res){
   }
 }
 
+
+function getReporteBarra(req, res){
+  try {
+    const postsusuario = {}
+    for (const post of listadepost) {
+      if (post.user in postsusuario) {
+        postsusuario[post.user] ++
+      }else {
+        postsusuario[post.user] = 1
+      } 
+    }
+    const usuariosPOST = Object.keys(postsusuario).map(user => ({
+      
+        user,
+        post: postsusuario[user]
+    }))
+
+    usuariosPOST.sort((a, b) => b.post - a.post)
+
+    const toppost = usuariosPOST.slice(0, 10)
+    
+    res.json(
+        { topbarras: toppost }
+    );
+
+  } catch (error) { 
+    return res.json(
+        {
+            error: "Ocurrió un error al obtener los posts"
+        }
+    )
+  }
+}
+
+
+
+
+
 module.exports = {
   registro,
   DatosUsuarios,
@@ -250,5 +292,6 @@ module.exports = {
   ActualizarUsuarios,
   EliminarUsuarios,
   crearPost,
-  getPost
+  getPost,
+  getReporteBarra
 };

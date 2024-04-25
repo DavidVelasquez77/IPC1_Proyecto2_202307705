@@ -1,4 +1,3 @@
-import React, { useState, useEffect} from 'react'; 
 import Fondo2 from "./fondo2.png";
 import {
   Navbar,
@@ -15,6 +14,8 @@ import {
 import { UsocialLogo } from "./UsocialLogo.jsx";
 import Auxfoto from "./auxfoto.png";
 import { Link as RouterLink } from "react-router-dom";
+import ReporteBarra from "./ReporteBarra.jsx";
+import ReportePieLikes from "./ReportePieLikes.jsx";
 
 export default function Reporte() {
   return (
@@ -39,23 +40,23 @@ export default function Reporte() {
           justify="center"
           style={{ color: "white" }}
         >
-<NavbarItem>
-  <Dropdown placement="bottom-start">
-    <DropdownTrigger>
-      <Link href="#" aria-current="page" color="#FFFFFF">
-        Carga Masiva
-      </Link>
-    </DropdownTrigger>
-    <DropdownMenu aria-label="Visualización de Datos" variant="flat">
-      <DropdownItem key="Usuarios">
-        <RouterLink to="/cargamasivausuario">Usuarios</RouterLink>
-      </DropdownItem>
-      <DropdownItem key="Publicaciones">
-        <RouterLink to="/cargamasivapost">Publicaciones</RouterLink>
-      </DropdownItem>
-    </DropdownMenu>
-  </Dropdown>
-</NavbarItem>
+          <NavbarItem>
+            <Dropdown placement="bottom-start">
+              <DropdownTrigger>
+                <Link href="#" aria-current="page" color="#FFFFFF">
+                  Carga Masiva
+                </Link>
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Visualización de Datos" variant="flat">
+                <DropdownItem key="Usuarios">
+                  <RouterLink to="/cargamasivausuario">Usuarios</RouterLink>
+                </DropdownItem>
+                <DropdownItem key="Publicaciones">
+                  <RouterLink to="/cargamasivapost">Publicaciones</RouterLink>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </NavbarItem>
           <NavbarItem>
             <Dropdown placement="bottom-start">
               <DropdownTrigger>
@@ -108,8 +109,20 @@ export default function Reporte() {
         </NavbarContent>
       </Navbar>
 
+      <div>
+        <h1 style={{ color: "white", fontSize: "2em" }}>
+          Top 10 usuarios con más publicaciones creadas
+        </h1>
+        <div style={{ width: "30%" }}>
+          <ReporteBarra />
+        </div>
+
+        <div style={{ width: "30%", background: "#FFEA9D" }}>
+                    <ReportePieLikes/>
+                </div>
 
 
+      </div>
     </div>
   );
 }

@@ -127,24 +127,28 @@ export default function Home() {
       {/* Mostrar los posts */}
       {listaObjetos.length > 0 ? (
         listaObjetos.map((objeto) => (
-          <Card key={objeto.id} style={{ maxWidth: 345, margin: "20px auto" }}>
-            <CardHeader />
-            <p>Usuario: {objeto.user}</p>
-            <p>Fecha: {new Date(objeto.fechaHora).toLocaleString()}</p>
-            {objeto.imagen && (
-              <CardMedia
-                component="img"
-                height="140"
-                image={objeto.imagen}
-                alt="Imagen del post"
-              />
-            )}
-            <CardContent>
-              sssss
-              <p className="card-description">{objeto.descripcion}</p>
-              <Button onClick={() => viewIdPost(objeto.id)}>Comentarios</Button>
-            </CardContent>
-          </Card>
+<Card key={objeto.id} style={{ maxWidth: 500, margin: "20px auto" }}>
+  <CardHeader />
+  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <div>
+      <p><strong>{objeto.user} {objeto.apellidos}</strong></p>
+      <p>{objeto.facultad} ({objeto.carrera})</p>
+    </div>
+    <p>Fecha: {new Date(objeto.fechaHora).toLocaleString()}</p>
+  </div>
+  {objeto.imagen && (
+    <CardMedia
+      component="img"
+      height="140"
+      image={objeto.imagen}
+      alt="Imagen del post"
+    />
+  )}
+  <CardContent>
+    <p className="card-description">{objeto.descripcion}</p>
+    <Button onClick={() => viewIdPost(objeto.id)}>Comentarios</Button>
+  </CardContent>
+</Card>
         ))
       ) : (
         <p>No hay publicaciones disponibles.</p>
