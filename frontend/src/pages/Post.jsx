@@ -80,6 +80,7 @@ export default function Post() {
       carnet: datosUsuario.carnet,  
       descripcion: contenido, 
       imagen: imagen, 
+      categoria: categoria,
     };
 
     fetch("http://localhost:5000/crearPost", {

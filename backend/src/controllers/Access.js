@@ -179,10 +179,12 @@ function crearPost(req,res){
     const carnet = req.body.carnet;
     const descripcion = req.body.descripcion;
     const imagen = req.body.imagen;
+    const categoria = req.body.categoria;
+    
 
     idPublicaciones = idPublicaciones + 1;
 
-    const nuevoPost = new Post(idPublicaciones, carnet, descripcion, imagen);
+    const nuevoPost = new Post(idPublicaciones, carnet, descripcion, imagen, categoria);
 
     // Asociar el post con el usuario que lo creó
     const usuario = listadeusuarios.find(user => user.carnet === carnet);
@@ -226,6 +228,7 @@ function getPost(req, res){
                 apellidos: usuario.apellidos,
                 carrera: usuario.carrera,
                 facultad: usuario.facultad, 
+                categoria: post.categoria,
                 
             };
 

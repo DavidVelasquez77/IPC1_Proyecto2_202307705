@@ -26,6 +26,20 @@ export default function Home() {
   const [datosUser, setDatosUser] = useState(null);
   const navigate = useNavigate(); // Obtiene la función de navegación
   const [listaObjetos, setListaObjetos] = useState([]);
+  function getHighlightColor(categoria) {
+    switch (categoria) {
+      case "Aviso importante":
+        return "lightcoral";
+      case "Divertido":
+        return "lightblue";
+      case "Académico":
+        return "lightgreen";
+      case "Variedad":
+        return "plum";
+      default:
+        return "white";
+    }
+  }
 
   useEffect(() => {
     const usuario = JSON.parse(Cookies.get("usuario") || "{}");
@@ -127,28 +141,44 @@ export default function Home() {
       {/* Mostrar los posts */}
       {listaObjetos.length > 0 ? (
         listaObjetos.map((objeto) => (
-<Card key={objeto.id} style={{ maxWidth: 500, margin: "20px auto" }}>
-  <CardHeader />
-  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-    <div>
-      <p><strong>{objeto.user} {objeto.apellidos}</strong></p>
-      <p>{objeto.facultad} ({objeto.carrera})</p>
-    </div>
-    <p>Fecha: {new Date(objeto.fechaHora).toLocaleString()}</p>
-  </div>
-  {objeto.imagen && (
-    <CardMedia
-      component="img"
-      height="140"
-      image={objeto.imagen}
-      alt="Imagen del post"
-    />
-  )}
-  <CardContent>
-    <p className="card-description">{objeto.descripcion}</p>
-    <Button onClick={() => viewIdPost(objeto.id)}>Comentarios</Button>
-  </CardContent>
-</Card>
+          <Card key={objeto.id} style={{ maxWidth: 500, margin: "20px auto" }}>
+            <CardHeader />
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>
+                <p>
+                  <strong>
+                    {objeto.user} {objeto.apellidos}
+                  </strong>
+                </p>
+                <p>
+                  {objeto.facultad} ({objeto.carrera})
+                </p>
+                <p
+                  style={{
+                    backgroundColor: getHighlightColor(objeto.categoria),
+                    borderRadius: "5px",
+                    display: "inline-block",
+                    padding: "2px 4px",
+                  }}
+                >
+                  {objeto.categoria}
+                </p>
+              </div>
+              <p>Fecha: {new Date(objeto.fechaHora).toLocaleString()}</p>
+            </div>
+            {objeto.imagen && (
+              <CardMedia
+                component="img"
+                height="140"
+                image={objeto.imagen}
+                alt="Imagen del post"
+              />
+            )}
+            <CardContent>
+              <p className="card-description">{objeto.descripcion}</p>
+              <Button onClick={() => viewIdPost(objeto.id)}>Comentarios</Button>
+            </CardContent>
+          </Card>
         ))
       ) : (
         <p>No hay publicaciones disponibles.</p>
