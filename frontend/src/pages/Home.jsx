@@ -50,9 +50,13 @@ export default function Home() {
   }
 
   useEffect(() => {
-    const storedComments = localStorage.getItem("comments");
+    const storedComments = sessionStorage.getItem("comments");
     if (storedComments) {
       setComments(JSON.parse(storedComments));
+    }
+    const storedLikes = sessionStorage.getItem("likes");
+    if (storedLikes) {
+      setLikes(JSON.parse(storedLikes));
     }
 
     const usuario = JSON.parse(Cookies.get("usuario") || "{}");
@@ -91,14 +95,24 @@ export default function Home() {
     if (newComment.trim() !== "") {
       const updatedComments = {
         ...comments,
-        [postId]: [...(comments[postId] || []), newComment],
+        [postId]: [
+          ...(comments[postId] || []),
+          {
+            commenter: datosUser
+              ? `${datosUser.nombres} ${datosUser.apellidos}`
+              : "Usuario Anónimo",
+            faculty: datosUser ? datosUser.facultad : "Universidad",
+            career: datosUser ? datosUser.carrera : "",
+            comment: newComment,
+          },
+        ],
       };
       setComments(updatedComments);
       setCommentInput({
         ...commentInput,
         [postId]: "",
       });
-      localStorage.setItem("comments", JSON.stringify(updatedComments)); // Guardar en localStorage
+      sessionStorage.setItem("comments", JSON.stringify(updatedComments)); // Guardar en localStorage
     }
   };
 
@@ -108,10 +122,13 @@ export default function Home() {
   };
 
   const handleLike = (id) => {
-    setLikes({
+    const updatedLikes = {
       ...likes,
       [id]: (likes[id] || 0) + 1,
-    });
+    };
+    setLikes(updatedLikes);
+    // Guardar la cantidad de likes en el localStorage
+    sessionStorage.setItem("likes", JSON.stringify(updatedLikes));
   };
 
   return (
@@ -175,10 +192,7 @@ export default function Home() {
               <DropdownItem key="profile" className="h-14 gap-2">
                 <p className="font-semibold">Signed in as</p>
               </DropdownItem>
-              <DropdownItem
-                onClick={handleLogout}
-                color="danger"
-              >
+              <DropdownItem onClick={handleLogout} color="danger">
                 Log Out
               </DropdownItem>
             </DropdownMenu>
@@ -188,7 +202,7 @@ export default function Home() {
 
       {listaObjetos.length > 0 ? (
         listaObjetos.map((objeto) => (
-          <Card key={objeto.id} style={{ maxWidth: 500, margin: "20px auto" }}>
+          <Card key={objeto.id} style={{ maxWidth: 500, margin: "20px auto",  padding: "10px"}}>
             <CardHeader />
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div>
@@ -206,7 +220,7 @@ export default function Home() {
                 {!objeto.anonimo && (
                   <div>
                     <p>
-                      {objeto.facultad} ({objeto.carrera})
+                      {objeto.carrera} ({objeto.facultad})
                     </p>
                   </div>
                 )}
@@ -232,10 +246,12 @@ export default function Home() {
               />
             )}
             <CardContent>
+            <p>{objeto.descripcion}</p>
               <div style={{ display: "flex", gap: "10px" }}>
+                
                 <Button
                   startIcon={<CommentIcon />}
-                  style={{ backgroundColor: '#C133FF', color: 'white' }}
+                  style={{ backgroundColor: "#C133FF", color: "white" }}
                   onClick={() => handleCommentSubmit(objeto.id)}
                   disabled={objeto.apellidos === "anónimo"}
                 >
@@ -243,7 +259,7 @@ export default function Home() {
                 </Button>
                 <Button
                   startIcon={<ThumbUpIcon />}
-                  style={{ backgroundColor: 'blue', color: 'white' }}
+                  style={{ backgroundColor: "blue", color: "white" }}
                   onClick={() => handleLike(objeto.id)}
                 >
                   Me gusta {likes[objeto.id] || 0}
@@ -259,12 +275,18 @@ export default function Home() {
                 }
                 style={{ marginTop: "10px" }}
               />
-              {comments[objeto.id] && comments[objeto.id].map((comment, index) => (
-                <div key={index} style={{ marginTop: "10px" }}>
-                  <p><strong>{datosUser ? datosUser.nombres : "Usuario"} {datosUser ? datosUser.apellidos : ""}</strong> ({datosUser ? datosUser.facultad : "Universidad"} - {datosUser ? datosUser.carrera : ""})</p>
-                  <p>{comment}</p>
-                </div>
-              ))}
+              {comments[objeto.id] &&
+                comments[objeto.id].map((comment, index) => (
+                  <div key={index} style={{ marginTop: "10px" }}>
+                    <p>
+                      <strong>{comment.commenter}</strong>
+                    </p>
+                    <p>
+                      {comment.career}({comment.faculty})
+                    </p>
+                    <p>{comment.comment}</p>
+                  </div>
+                ))}
             </CardContent>
           </Card>
         ))
