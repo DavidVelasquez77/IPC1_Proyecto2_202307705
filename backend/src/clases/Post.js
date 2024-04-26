@@ -7,6 +7,9 @@ class Post {
         this.fechaHora = new Date();
         this.categoria = categoria;
         this.anonimo = anonimo;
+
+
+        
     }
   }
   

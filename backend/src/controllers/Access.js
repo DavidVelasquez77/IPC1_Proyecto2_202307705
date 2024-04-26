@@ -218,36 +218,36 @@ function getPost(req, res){
 
         const usuario = listadeusuarios.find(user => user.carnet === post.user);
 
-        // Verificar si el usuario existe y si el post es anónimo
-        if (usuario && !post.anonimo) {
-            const postusuario = {
-                id: post.id,
-                descripcion: post.descripcion,
-                imagen: post.imagen,
-                fechaHora: post.fechaHora,
-                user: usuario.nombres,
-                apellidos: usuario.apellidos,
-                carrera: usuario.carrera,
-                facultad: usuario.facultad, 
-                categoria: post.categoria,
-                
-            };
-            postsusuario.push(postusuario);
-        } else if (post.anonimo) {
-            // Si el post es anónimo, establecer los valores predeterminados
-            const postAnonimo = {
-                id: post.id,
-                descripcion: post.descripcion,
-                imagen: post.imagen,
-                fechaHora: post.fechaHora,
-                user: "Usuario ",
-                apellidos: "anónimo",
-                carrera: "San Carlos de Guatemala ",
-                facultad: "Universidad",
-                categoria: post.categoria,
-            };
-            postsusuario.push(postAnonimo);
-        }
+if (post.anonimo === true) {
+    // Si el post es anónimo, establecer los valores predeterminados
+    const postAnonimo = {
+        id: post.id,
+        descripcion: post.descripcion,
+        imagen: post.imagen,
+        fechaHora: post.fechaHora,
+        user: "Usuario",
+        apellidos: "anónimo",
+        carrera: "San Carlos de Guatemala",
+        facultad: "Universidad",
+        categoria: post.categoria,
+
+    };
+    postsusuario.push(postAnonimo);
+} else {
+    // Si el post no es anónimo, usar los datos del usuario
+    const postusuario = {
+        id: post.id,
+        descripcion: post.descripcion,
+        imagen: post.imagen,
+        fechaHora: post.fechaHora,
+        user: usuario.nombres,
+        apellidos: usuario.apellidos,
+        carrera: usuario.carrera,
+        facultad: usuario.facultad, 
+        categoria: post.categoria,
+    };
+    postsusuario.push(postusuario);
+}
     }
 
     postsusuario.reverse();
@@ -258,11 +258,14 @@ function getPost(req, res){
   } catch (error) {
     return res.json(
         {
-            error: "Ocurrió un error al obtener los posts"
+            error: "Ocurrió un error al obtener los posts."
         }
     )
   }
 }
+
+
+
 
 
 function getReporteBarra(req, res){
@@ -300,8 +303,6 @@ function getReporteBarra(req, res){
 
 
 
-
-
 module.exports = {
   registro,
   DatosUsuarios,
@@ -310,5 +311,6 @@ module.exports = {
   EliminarUsuarios,
   crearPost,
   getPost,
-  getReporteBarra
+  getReporteBarra,
+  
 };

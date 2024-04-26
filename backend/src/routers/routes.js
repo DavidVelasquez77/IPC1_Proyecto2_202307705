@@ -3,7 +3,7 @@
     const router = express.Router();
 
 
-    const {registro,   DatosUsuarios, iniciarSesion,  ActualizarUsuarios, EliminarUsuarios, crearPost, getPost, getReporteBarra} = require('../controllers/Access');
+    const {registro,   DatosUsuarios, iniciarSesion,  ActualizarUsuarios, EliminarUsuarios, crearPost, getPost, getReporteBarra, } = require('../controllers/Access');
 //--------------GET----------------
     router.get('/DatosUsuarios', DatosUsuarios);
     router.get('/getPost', getPost);
