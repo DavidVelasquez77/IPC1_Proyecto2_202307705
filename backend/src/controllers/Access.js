@@ -313,7 +313,7 @@
 
   function eliminarPost(req, res) {
     try {
-      const postId = req.params.id; // Obtener el ID del post de los parámetros de la URL
+      const postId = req.params.id;
   
       // Buscar el post en la lista de publicaciones
       const postIndex = listadepost.findIndex(post => post.id === parseInt(postId));

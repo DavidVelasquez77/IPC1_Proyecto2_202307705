@@ -171,7 +171,7 @@ export default function VisualizacionPost() {
 
   
   <div style={{ display: 'flex', justifyContent: 'center' }}>
-  <Button color="primary" variant="faded" auto onClick={exportarCSV}>
+  <Button color="primary" variant="shadow" auto onClick={exportarCSV}>
     Exportar CSV
   </Button>
 </div>
