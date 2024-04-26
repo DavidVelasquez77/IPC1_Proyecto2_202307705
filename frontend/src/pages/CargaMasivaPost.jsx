@@ -1,4 +1,5 @@
 import Fondo2 from "./fondo2.png";
+import React, { useState, useEffect } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -10,12 +11,45 @@ import {
   Dropdown,
   DropdownMenu,
   Avatar,
+  Table,
+  TableHeader,
+  TableBody,
+  TableColumn,
+  TableRow,
+  TableCell,
 } from "@nextui-org/react";
 import { UsocialLogo } from "./UsocialLogo.jsx";
 import Auxfoto from "./auxfoto.png";
 import { Link as RouterLink } from "react-router-dom";
 
 export default function CargaMasivaPost() {
+  const [data, setData] = useState(() => {
+    // Intenta cargar los datos del sessionStorage al iniciar
+    const sessionData = sessionStorage.getItem('data');
+    return sessionData ? JSON.parse(sessionData) : [];
+  });
+
+  useEffect(() => {
+    // Guarda los datos en el sessionStorage cada vez que cambien
+    sessionStorage.setItem('data', JSON.stringify(data));
+  }, [data]);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      try {
+        const jsonData = JSON.parse(e.target.result);
+        setData(jsonData);
+      } catch (error) {
+        console.error("Error al leer el archivo JSON:", error);
+      }
+    };
+
+    reader.readAsText(file);
+  };
+
   return (
     <div
       style={{
@@ -38,23 +72,23 @@ export default function CargaMasivaPost() {
           justify="center"
           style={{ color: "white" }}
         >
-<NavbarItem>
-  <Dropdown placement="bottom-start">
-    <DropdownTrigger>
-      <Link href="#" aria-current="page" color="#FFFFFF">
-        Carga Masiva
-      </Link>
-    </DropdownTrigger>
-    <DropdownMenu aria-label="Visualización de Datos" variant="flat">
-      <DropdownItem key="Usuarios">
-        <RouterLink to="/cargamasivausuario">Usuarios</RouterLink>
-      </DropdownItem>
-      <DropdownItem key="Publicaciones">
-        <RouterLink to="/cargamasivapost">Publicaciones</RouterLink>
-      </DropdownItem>
-    </DropdownMenu>
-  </Dropdown>
-</NavbarItem>
+          <NavbarItem>
+            <Dropdown placement="bottom-start">
+              <DropdownTrigger>
+                <Link href="#" aria-current="page" color="#FFFFFF">
+                  Carga Masiva
+                </Link>
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Visualización de Datos" variant="flat">
+                <DropdownItem key="Usuarios">
+                  <RouterLink to="/cargamasivausuario">Usuarios</RouterLink>
+                </DropdownItem>
+                <DropdownItem key="Publicaciones">
+                  <RouterLink to="/cargamasivapost">Publicaciones</RouterLink>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </NavbarItem>
           <NavbarItem>
             <Dropdown placement="bottom-start">
               <DropdownTrigger>
@@ -106,6 +140,36 @@ export default function CargaMasivaPost() {
           </Dropdown>
         </NavbarContent>
       </Navbar>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <input
+          type="file"
+          accept=".json"
+          onChange={handleFileChange}
+          style={{ margin: "10px 0" }}
+        />
+      </div>
+      <Table aria-label="Tabla de Datos">
+        <TableHeader>
+          <TableColumn>Código</TableColumn>
+          <TableColumn>Descripción</TableColumn>
+          <TableColumn>Categoría</TableColumn>
+          <TableColumn>Anónimo</TableColumn>
+        </TableHeader>
+        <TableBody>
+          {data.map((item, index) => (
+            <TableRow key={index}>
+              <TableCell style={{ color: "white" }}>{item.codigo}</TableCell>
+              <TableCell style={{ color: "white" }}>
+                {item.descripcion}
+              </TableCell>
+              <TableCell style={{ color: "white" }}>{item.categoria}</TableCell>
+              <TableCell style={{ color: "white" }}>
+                {item.anonimo ? "Sí" : "No"}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }
