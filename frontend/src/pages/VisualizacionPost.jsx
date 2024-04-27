@@ -177,7 +177,7 @@ export default function VisualizacionPost() {
 </div>
       <Table aria-label="Tabla de Publicaciones">
         <TableHeader>
-          <TableColumn>Código/Carnet</TableColumn>
+          <TableColumn>Código</TableColumn>
           <TableColumn>Descripción</TableColumn>
           <TableColumn>Categoría</TableColumn>
           <TableColumn>Anónimo</TableColumn>
@@ -231,7 +231,7 @@ export default function VisualizacionPost() {
               Detalles de la Publicación
             </AccordionSummary>
             <AccordionDetails>
-              <p>Código/Carnet: {publicacionSeleccionada.user}</p>
+              <p>Código: {publicacionSeleccionada.user}</p>
               <p>Descripción: {publicacionSeleccionada.descripcion}</p>
               <p>Categoría: {publicacionSeleccionada.categoria}</p>
               <p>Anónimo: {publicacionSeleccionada.anonimo.toString()}</p>

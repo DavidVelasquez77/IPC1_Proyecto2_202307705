@@ -6,14 +6,14 @@ import Cookies from "js-cookie";
 import Fondo from "./fondologin.jpg";
 
 export default function Login() {
-  const [carnet, setCarnet] = useState("");
+  const [codigo, setCodigo] = useState("");
   const [contraseña, setContraseña] = useState("");
   const [redirectPath, setRedirectPath] = useState(null);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const JsonDatos = {
-      carnet: carnet,
+      codigo: codigo,
       contraseña: contraseña,
     };
 
@@ -46,7 +46,7 @@ export default function Login() {
         } else if (
           data.error === "el usuario no existe o la contraseña es incorrecta"
         ) {
-          alert("Carnet o contraseña incorrecta");
+          alert("Codigo o contraseña incorrecta");
         } else {
           console.log(data);
         }
@@ -75,9 +75,9 @@ export default function Login() {
           <div>
             <Input
               type="text"
-              label="carnet"
-              onChange={(e) => setCarnet(e.target.value)}
-              value={carnet}
+              label="codigo"
+              onChange={(e) => setCodigo(e.target.value)}
+              value={codigo}
               autoComplete="off"
               className="w-full bg-transparent text-white border border-white"
               style={{ color: "white" }}

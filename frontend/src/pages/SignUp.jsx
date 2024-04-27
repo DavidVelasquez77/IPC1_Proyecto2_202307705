@@ -4,7 +4,7 @@ import { Input, Button } from "@nextui-org/react";
 import { Link } from "react-router-dom";
 
 export default function SignUp() {
-  const [carnet, setCarnet] = useState("");
+  const [codigo, setCodigo] = useState("");
   const [nombres, setNombres] = useState("");
   const [apellidos, setApellidos] = useState("");
   const [genero, setGenero] = useState("");
@@ -24,7 +24,7 @@ export default function SignUp() {
     }
 
     const JsonDatos = {
-      carnet: carnet,
+      codigo: codigo,
       nombres: nombres,
       apellidos: apellidos,
       genero: genero,
@@ -77,9 +77,9 @@ export default function SignUp() {
           <Input
             isRequired
             type="text"
-            label="Carnet/Código USAC"
+            label="Código USAC"
             variant="bordered"
-            onChange={(event) => setCarnet(event.target.value)}
+            onChange={(event) => setCodigo(event.target.value)}
             className="max-w-md"
           />
           <hr

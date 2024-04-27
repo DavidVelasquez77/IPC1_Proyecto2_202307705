@@ -21,17 +21,21 @@ import {
 import { UsocialLogo } from "./UsocialLogo.jsx";
 import Auxfoto from "./auxfoto.png";
 import { Link as RouterLink } from "react-router-dom";
-
+import axios from "axios"; 
 export default function CargaMasivaPost() {
   const [data, setData] = useState(() => {
     // Intenta cargar los datos del sessionStorage al iniciar
     const sessionData = sessionStorage.getItem('data');
     return sessionData ? JSON.parse(sessionData) : [];
   });
+    
 
   useEffect(() => {
     // Guarda los datos en el sessionStorage cada vez que cambien
     sessionStorage.setItem('data', JSON.stringify(data));
+
+    // Cuando los datos cambien, llama a la función para crear los posts
+    crearPosts();
   }, [data]);
 
   const handleFileChange = (event) => {
@@ -49,6 +53,19 @@ export default function CargaMasivaPost() {
 
     reader.readAsText(file);
   };
+    // Función para crear los posts automáticamente
+    const crearPosts = async () => {
+      try {
+        // Hacer una solicitud HTTP para crear cada post
+        await Promise.all(data.map(async (item) => {
+          await axios.post('http://localhost:5000/crearPost', item);
+        }));
+      } catch (error) {
+        console.error("Error al crear los posts:", error);
+      }
+    };
+
+    
 
   return (
     <div

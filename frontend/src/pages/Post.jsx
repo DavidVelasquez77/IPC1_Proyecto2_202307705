@@ -72,12 +72,12 @@ export default function Post() {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("datosUsuario:", datosUsuario);
-    if (!datosUsuario || !datosUsuario.carnet) {
-      console.error("datosUsuario o datosUsuario.carnet no están definidos");
+    if (!datosUsuario || !datosUsuario.codigo) {
+      console.error("datosUsuario o datosUsuario.codigo no están definidos");
       return;
     }
     const dataJson = {
-      carnet: datosUsuario.carnet,  
+      codigo: datosUsuario.codigo,  
       descripcion: contenido, 
       imagen: imagen, 
       categoria: categoria,

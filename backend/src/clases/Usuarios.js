@@ -1,6 +1,6 @@
 class Usuario{
-    constructor(Carnet,Nombres,Apellidos,Genero,Facultad,Carrera,Correo_electronico,Contraseña ){
-        this.carnet = Carnet
+    constructor(Codigo,Nombres,Apellidos,Genero,Facultad,Carrera,Correo_electronico,Contraseña ){
+        this.codigo = Codigo
         this.nombres = Nombres
         this.apellidos = Apellidos
         this.genero = Genero

@@ -41,13 +41,13 @@ export default function VisualizacionUsuarios() {
 
 
 
-const handleEliminarUsuario = (carnet) => {
+const handleEliminarUsuario = (codigo) => {
   fetch(`http://localhost:5000/EliminarUsuarios`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ carnet }),
+    body: JSON.stringify({ codigo }),
   })
   .then(response => response.json())
   .then(data => {
@@ -178,7 +178,7 @@ const handleEliminarUsuario = (carnet) => {
     </Button>
     <Table aria-label="Tabla de Usuarios" style={{ width: "80%" }}>
     <TableHeader>
-      <TableColumn>Código/Carnet</TableColumn>
+      <TableColumn>Código</TableColumn>
       <TableColumn>Nombres</TableColumn>
       <TableColumn>Apellidos</TableColumn>
       <TableColumn>Género</TableColumn>
@@ -190,8 +190,8 @@ const handleEliminarUsuario = (carnet) => {
     </TableHeader>
     <TableBody>
       {usuarios.map(usuario => (
-        <TableRow key={usuario.carnet}>
-          <TableCell style={{ color: "white" }}>{usuario.carnet}</TableCell>
+        <TableRow key={usuario.codigo}>
+          <TableCell style={{ color: "white" }}>{usuario.codigo}</TableCell>
           <TableCell style={{ color: "white" }}>{usuario.nombres}</TableCell>
           <TableCell style={{ color: "white" }}>{usuario.apellidos}</TableCell>
           <TableCell style={{ color: "white" }}>{usuario.genero}</TableCell>
@@ -219,7 +219,7 @@ const handleEliminarUsuario = (carnet) => {
                   <p>Contraseña: {usuario.contraseña}</p>
                 </AccordionDetails>
               </Accordion>
-              <Button onClick={() => handleEliminarUsuario(usuario.carnet)} color="danger">Eliminar</Button>
+              <Button onClick={() => handleEliminarUsuario(usuario.codigo)} color="danger">Eliminar</Button>
             </div>
           </TableCell>
         </TableRow>

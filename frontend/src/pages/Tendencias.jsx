@@ -45,7 +45,7 @@ export default function Tendencias() {
       case "Variedad":
         return "plum";
       default:
-        return "white";
+        return "lightgray";
     }
   }
 

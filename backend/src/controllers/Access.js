@@ -19,7 +19,7 @@
   function registro(req, res) {
     try {
       const {
-        carnet,
+        codigo,
         nombres,
         apellidos,
         genero,
@@ -29,10 +29,10 @@
         contraseña,
       } = req.body;
 
-      const usuarioExistente = listadeusuarios.find((usuario) => usuario.carnet === carnet);
+      const usuarioExistente = listadeusuarios.find((usuario) => usuario.codigo === codigo);
       if (usuarioExistente) {
         return res.json({
-          error: "el usuario con este carnet ya existe",
+          error: "el usuario con este codigo ya existe",
         });
       }
 
@@ -45,7 +45,7 @@
       }
 
       const nuevousuario = new Usuario(
-        carnet,
+        codigo,
         nombres,
         apellidos,
         genero,
@@ -79,16 +79,16 @@
 
   function iniciarSesion(req, res) {
     try {
-      const Carnet = req.body.carnet;
+      const Codigo = req.body.codigo;
       const ContraseñaFronted = req.body.contraseña;
       const usuario = listadeusuarios.find(
         (usuario) =>
-          usuario.carnet === Carnet && usuario.contraseña === ContraseñaFronted
+          usuario.codigo === Codigo && usuario.contraseña === ContraseñaFronted
       );
 
       if (usuario) {
         const usuarioubicado = {
-          carnet: usuario.carnet,
+          codigo: usuario.codigo,
           nombres: usuario.nombres,
           apellidos: usuario.apellidos,
           genero: usuario.genero,
@@ -116,7 +116,7 @@
   function ActualizarUsuarios(req, res) {
     try {
       const {
-        carnet,
+        codigo,
         nombres,
         apellidos,
         genero,
@@ -126,10 +126,10 @@
         contraseña,
       } = req.body;
       const usuario = listadeusuarios.find(
-        (usuario) => usuario.carnet === carnet
+        (usuario) => usuario.codigo === codigo
       );
       if (usuario) {
-        usuario.carnet = carnet;
+        usuario.codigo = codigo;
         usuario.nombres = nombres;
         usuario.apellidos = apellidos;
         usuario.genero = genero;
@@ -153,9 +153,9 @@
   }
   function EliminarUsuarios(req, res) {
     try {
-      const Carnet = req.body.carnet;
+      const Codigo = req.body.codigo;
       const usuario = listadeusuarios.find(
-        (usuario) => usuario.carnet === Carnet
+        (usuario) => usuario.codigo === Codigo
       );
       if (usuario) {
         const index = listadeusuarios.indexOf(usuario);
@@ -176,7 +176,7 @@
   }
   function crearPost(req, res) {
     try {
-      const carnet = req.body.carnet;
+      const codigo = req.body.codigo;
       const descripcion = req.body.descripcion;
       const imagen = req.body.imagen;
       const categoria = req.body.categoria;
@@ -184,15 +184,15 @@
 
       idPublicaciones++; // Incrementa el ID de publicaciones
 
-      const nuevoPost = new Post(idPublicaciones, carnet, descripcion, imagen, categoria, anonimo);
+      const nuevoPost = new Post(idPublicaciones, codigo, descripcion, imagen, categoria, anonimo);
 
       // Si el post es anónimo, no asociamos a ningún usuario
       if (!anonimo) {
-        const usuario = listadeusuarios.find(user => user.carnet === carnet);
+        const usuario = listadeusuarios.find(user => user.codigo === codigo);
         if (!usuario) {
           return res.json({ error: "El usuario no existe." });
         }
-        nuevoPost.user = usuario.carnet;
+        nuevoPost.user = usuario.codigo;
       }
 
       listadepost.push(nuevoPost);
@@ -216,7 +216,7 @@
 
       for (const post of listadepost) {
 
-          const usuario = listadeusuarios.find(user => user.carnet === post.user);
+          const usuario = listadeusuarios.find(user => user.codigo === post.user);
 
   if (post.anonimo === true) {
       // Si el post es anónimo, establecer los valores predeterminados
@@ -227,8 +227,8 @@
           fechaHora: post.fechaHora,
           user: "Usuario",
           apellidos: "anónimo",
-          carrera: "San Carlos de Guatemala",
-          facultad: "Universidad",
+          carrera: "Universidad",
+          facultad: "San Carlos de Guatemala",
           categoria: post.categoria,
 
       };

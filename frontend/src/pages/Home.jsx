@@ -45,7 +45,7 @@ export default function Home() {
       case "Variedad":
         return "plum";
       default:
-        return "white";
+        return "lightgray";
     }
   }
 

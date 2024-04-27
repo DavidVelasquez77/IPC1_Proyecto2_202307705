@@ -25,7 +25,7 @@ import { Link as RouterLink } from "react-router-dom";
 export default function CargaMasivaUsuarios() {
   const [usuarios, setUsuarios] = useState([]);
   const [nuevoUsuario, setNuevoUsuario] = useState({
-    carnet: '',
+    codigo: '',
     nombres: '',
     apellidos: '',
     genero: '',
@@ -167,7 +167,7 @@ export default function CargaMasivaUsuarios() {
       
       <Table aria-label="Tabla de Usuarios" style={{ width: "80%" }}>
         <TableHeader>
-          <TableColumn>Código/Carnet</TableColumn>
+          <TableColumn>Código</TableColumn>
           <TableColumn>Nombres</TableColumn>
           <TableColumn>Apellidos</TableColumn>
           <TableColumn>Género</TableColumn>
@@ -178,8 +178,8 @@ export default function CargaMasivaUsuarios() {
         </TableHeader>
         <TableBody>
           {usuarios.map(usuario => (
-            <TableRow key={usuario.carnet}>
-              <TableCell style={{ color: "white" }}>{usuario.carnet}</TableCell>
+            <TableRow key={usuario.codigo}>
+              <TableCell style={{ color: "white" }}>{usuario.codigo}</TableCell>
               <TableCell style={{ color: "white" }}>{usuario.nombres}</TableCell>
               <TableCell style={{ color: "white" }}>{usuario.apellidos}</TableCell>
               <TableCell style={{ color: "white" }}>{usuario.genero}</TableCell>
