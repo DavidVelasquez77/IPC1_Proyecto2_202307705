@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Fondohome from "./fondohome.png";
 import {
   Navbar,
@@ -24,6 +24,7 @@ import {
 } from "@material-ui/core";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import CommentIcon from "@material-ui/icons/Comment";
+import Chart from 'chart.js/auto';
 
 export default function Home() {
   const [datosUser, setDatosUser] = useState(null);
@@ -33,6 +34,8 @@ export default function Home() {
   const [comments, setComments] = useState({});
   const [commentInput, setCommentInput] = useState({});
   const [commentCounts, setCommentCounts] = useState({});
+  const chartLikesRef = useRef(null); // Referencia para el elemento canvas de la gráfica de likes
+  const chartPieRef = useRef(null); // Referencia para el elemento canvas de la gráfica de pie
 
   function getHighlightColor(categoria) {
     switch (categoria) {
@@ -129,7 +132,125 @@ export default function Home() {
     setLikes(updatedLikes);
     // Guardar la cantidad de likes en el localStorage
     sessionStorage.setItem("likes", JSON.stringify(updatedLikes));
+    // Forzar un nuevo renderizado
+    setListaObjetos([...listaObjetos]);
   };
+
+  useEffect(() => {
+    // Verificar si Chart.js está disponible
+    if (typeof Chart !== 'function') {
+      console.error("Error: Chart.js no está disponible.");
+      return;
+    }
+
+    // Verificar si la referencia al elemento canvas de la gráfica de likes está disponible
+    if (!chartLikesRef.current) {
+      console.error("Error: Referencia al elemento canvas de la gráfica de likes no encontrada.");
+      return;
+    }
+
+    // Obtener los datos de likes de la sessionStorage
+    const likesData = JSON.parse(sessionStorage.getItem("likes") || "{}");
+
+    // Convertir los datos en un array de objetos [{ id: "id", likes: cantidad }]
+    const likesArray = Object.keys(likesData).map(id => ({ id, likes: likesData[id] || 0 }));
+
+    // Obtener los 5 posts con más likes
+    const top5Likes = likesArray
+      .sort((a, b) => b.likes - a.likes)
+      .slice(0, 5);
+
+    // Configuración de los datos para la gráfica de likes
+    const dataLikes = {
+      labels: top5Likes.map((item, index) => `Publicación ${index + 1}`), // Etiquetas de las partes de la gráfica
+      datasets: [{
+        label: 'Likes por Publicación',
+        data: top5Likes.map(item => item.likes), // Datos de likes
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.5)',
+          'rgba(54, 162, 235, 0.5)',
+          'rgba(255, 206, 86, 0.5)',
+          'rgba(75, 192, 192, 0.5)',
+          'rgba(153, 102, 255, 0.5)',
+        ],
+        hoverOffset: 5
+      }]
+    };
+
+    // Configuración de la gráfica de likes
+    const configLikes = {
+      type: "pie", // Tipo de gráfica
+      data: dataLikes // Datos de la gráfica
+    };
+
+    // Crear una instancia de la gráfica en el elemento canvas
+    const chartLikes = new Chart(chartLikesRef.current, configLikes);
+
+    // Devolver una función para limpiar la gráfica al desmontar el componente
+    return () => chartLikes.destroy();
+  }, []);
+
+  useEffect(() => {
+    // Verificar si Chart.js está disponible
+    if (typeof Chart !== 'function') {
+      console.error("Error: Chart.js no está disponible.");
+      return;
+    }
+
+    // Verificar si la referencia al elemento canvas de la gráfica de pie está disponible
+    if (!chartPieRef.current) {
+      console.error("Error: Referencia al elemento canvas de la gráfica de pie no encontrada.");
+      return;
+    }
+
+    // Crear instancia de la gráfica de pie si aún no existe
+    if (!chartPieRef.current.chartInstance) {
+      const categoryCounts = {};
+      listaObjetos.forEach((objeto) => {
+        categoryCounts[objeto.categoria] = (categoryCounts[objeto.categoria] || 0) + 1;
+      });
+
+      // Configuración de datos para la gráfica de pie
+      const dataConfig = {
+        labels: Object.keys(categoryCounts),
+        datasets: [{
+          label: 'Cantidad de Publicaciones por Categoría',
+          data: Object.values(categoryCounts),
+          backgroundColor: [
+            'lightcoral',
+            'lightblue',
+            'lightgreen',
+            'plum',
+            'lightgray'
+            // Puedes agregar más colores si tienes más categorías
+          ],
+          hoverOffset: 5
+        }]
+      };
+
+      // Configuración de la gráfica de pie
+      const config = {
+        type: "pie",
+        data: dataConfig
+      };
+
+      // Crear instancia de la gráfica en el elemento canvas
+      chartPieRef.current.chartInstance = new Chart(chartPieRef.current, config);
+    } else {
+      // Si la instancia de la gráfica ya existe, solo actualizar los datos
+      const categoryCounts = {};
+      listaObjetos.forEach((objeto) => {
+        categoryCounts[objeto.categoria] = (categoryCounts[objeto.categoria] || 0) + 1;
+      });
+
+      chartPieRef.current.chartInstance.data.labels = Object.keys(categoryCounts);
+      chartPieRef.current.chartInstance.data.datasets[0].data = Object.values(categoryCounts);
+
+      // Actualizar la gráfica
+      chartPieRef.current.chartInstance.update();
+    }
+
+  }, [listaObjetos]); // Actualizar cuando la lista de objetos cambie
 
   return (
     <div
@@ -246,9 +367,8 @@ export default function Home() {
               />
             )}
             <CardContent>
-            <p>{objeto.descripcion}</p>
+              <p>{objeto.descripcion}</p>
               <div style={{ display: "flex", gap: "10px" }}>
-                
                 <Button
                   startIcon={<CommentIcon />}
                   style={{ backgroundColor: "#C133FF", color: "white" }}
@@ -293,6 +413,18 @@ export default function Home() {
       ) : (
         <p>No hay publicaciones disponibles.</p>
       )}
+
+      <div style={{ display: "flex", justifyContent: "space-around", marginTop: "20px" }}>
+        <div style={{ maxWidth: 400 }}>
+          <h2>Likes por Publicación</h2>
+          <canvas ref={chartLikesRef} width="400" height="400"></canvas>
+        </div>
+
+        <div style={{ maxWidth: 400 }}>
+          <h2>Cantidad de Publicaciones por Categoría</h2>
+          <canvas ref={chartPieRef} width="400" height="400"></canvas>
+        </div>
+      </div>
     </div>
   );
 }

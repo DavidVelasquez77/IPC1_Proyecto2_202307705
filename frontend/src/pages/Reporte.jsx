@@ -17,7 +17,9 @@ import { Link as RouterLink } from "react-router-dom";
 import ReporteBarra from "./ReporteBarra.jsx";
 import ReportePieLikes from "./ReportePieLikes.jsx";
 
+
 export default function Reporte() {
+  
   return (
     <div
       style={{
@@ -110,16 +112,12 @@ export default function Reporte() {
       </Navbar>
 
       <div>
-        <h1 style={{ color: "white", fontSize: "2em" }}>
-          Top 10 usuarios con más publicaciones creadas
-        </h1>
+
         <div style={{ width: "30%" }}>
           <ReporteBarra />
+          
         </div>
 
-        <div style={{ width: "30%", background: "#FFEA9D" }}>
-                    <ReportePieLikes/>
-                </div>
 
 
       </div>
