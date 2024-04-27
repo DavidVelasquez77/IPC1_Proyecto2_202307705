@@ -15,7 +15,7 @@ import { UsocialLogo } from "./UsocialLogo.jsx";
 import Auxfoto from "./auxfoto.png";
 import { Link as RouterLink } from "react-router-dom";
 import ReporteBarra from "./ReporteBarra.jsx";
-import ReportePieLikes from "./ReportePieLikes.jsx";
+
 
 
 export default function Reporte() {
